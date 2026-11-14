@@ -4,7 +4,8 @@
 
 ## 구조
 
-- `springboot-developer/` — 책의 실습 프로젝트. 책과 같은 이름·패키지(`me.shinsunyoung.springbootdeveloper`)를 쓴다
+- `springboot-developer/` — 책의 실습 프로젝트. 프로젝트 이름은 책과 같고, 패키지는 `me.pyrite9.springbootdeveloper` 다. 책은 `me.shinsunyoung.springbootdeveloper` 를 쓴다
+- 책과 저자 예제 저장소 코드의 package·import 에 나오는 `me.shinsunyoung` 은 이 저장소에서 `me.pyrite9` 로 바꿔 쓴다
 - IntelliJ에서는 `springboot-developer` 폴더를 연다 (저장소 루트가 아니다)
 
 ## 버전 (책과 다르다)
