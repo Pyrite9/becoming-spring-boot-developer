@@ -1,6 +1,9 @@
 # 책 스캔본 (개인 학습용, 절대 커밋하지 않는다)
 books/
 
+# 강의 자료 (개인 학습용, 절대 커밋하지 않는다)
+lectures/
+
 # Gradle
 .gradle/
 build/
