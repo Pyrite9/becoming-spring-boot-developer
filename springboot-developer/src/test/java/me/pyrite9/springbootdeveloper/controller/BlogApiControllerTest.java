@@ -50,7 +50,7 @@ public class BlogApiControllerTest {
     @DisplayName("addArticle: 블로그 글 추가에 성공한다.")
     @Test
     public void addArticle() throws Exception {
-        // given
+        // Given
         final String url = "/api/articles";
         final String title = "title";
         final String content = "content";
@@ -59,13 +59,13 @@ public class BlogApiControllerTest {
         // 객체 직렬화
         final String requestBody = objectMapper.writeValueAsString(userRequest);
 
-        // when
+        // When
         // 설정 내용을 바탕으로 요청 전송
         ResultActions result = mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestBody));
 
-        // then
+        // Then
         result.andExpect(status().isCreated());
 
         List<Article> articles = blogRepository.findAll();
@@ -80,7 +80,7 @@ public class BlogApiControllerTest {
     @DisplayName("findAllArticles: 블로그 글 목록 조회에 성공한다.")
     @Test
     public void findAllArticles() throws Exception {
-        //given
+        // Given
         final String url = "/api/articles";
 
         // 2건 미리 생성
@@ -89,7 +89,6 @@ public class BlogApiControllerTest {
         final String title2 = "title2";
         final String content2 = "content2";
 
-            // 2건 이상 미리 저장하기
         blogRepository.save(Article.builder()
                 .title(title1)
                 .content(content1)
@@ -99,11 +98,11 @@ public class BlogApiControllerTest {
                 .content(content2)
                 .build());
 
-        //when
+        // When
         final ResultActions resultActions = mockMvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON));
 
-        //then
+        // Then
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
@@ -118,7 +117,7 @@ public class BlogApiControllerTest {
     @DisplayName("findArticle: 블로그 글 조회에 성공한다.")
     @Test
     public void findArticle() throws Exception {
-        // given
+        // Given
         final String url = "/api/articles/{id}";
         final String title = "title";
         final String content = "content";
@@ -128,10 +127,10 @@ public class BlogApiControllerTest {
                 .content(content)
                 .build());
 
-        //when
+        // When
         final ResultActions resultActions = mockMvc.perform(get(url, savedArticle.getId()));
 
-        //then
+        // Then
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value(content))
@@ -142,7 +141,7 @@ public class BlogApiControllerTest {
     @DisplayName("deleteArticle: 블로그 글 삭제에 성공한다.")
     @Test
     public void deleteArticle() throws Exception {
-        //given
+        // Given
         final String url = "/api/articles/{id}";
         final String title = "title";
         final String content = "content";
@@ -152,20 +151,20 @@ public class BlogApiControllerTest {
                 .content(content)
                 .build());
 
-        // when
-        mockMvc.perform(delete(url, savedArticle.getId()))
-                .andExpect(status().isOk());
+        // When
+        ResultActions result = mockMvc.perform(delete(url, savedArticle.getId()));
 
-        // then
+        // Then
+        result.andExpect(status().isOk());
+
         List<Article> articles = blogRepository.findAll();
-
         assertThat(articles).isEmpty();
     }
 
     @DisplayName("updateArticle: 블로그 글 수정에 성공한다.")
     @Test
     public void updateArticle() throws Exception {
-        // given
+        // Given
         final String url = "/api/articles/{id}";
         final String title = "title";
         final String content = "content";
@@ -180,12 +179,12 @@ public class BlogApiControllerTest {
 
         UpdateArticleRequest request = new UpdateArticleRequest(newTitle, newContent);
 
-        // when
+        // When
         ResultActions result = mockMvc.perform(put(url, savedArticle.getId())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(request)));
 
-        // then
+        // Then
         result.andExpect(status().isOk());
 
         Article article = blogRepository.findById(savedArticle.getId()).get();
