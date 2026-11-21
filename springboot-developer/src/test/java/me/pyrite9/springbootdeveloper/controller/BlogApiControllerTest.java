@@ -5,7 +5,6 @@ import me.pyrite9.springbootdeveloper.domain.Article;
 import me.pyrite9.springbootdeveloper.dto.AddArticleRequest;
 import me.pyrite9.springbootdeveloper.dto.UpdateArticleRequest;
 import me.pyrite9.springbootdeveloper.repository.BlogRepository;
-import org.hibernate.sql.Update;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,12 +82,21 @@ public class BlogApiControllerTest {
     public void findAllArticles() throws Exception {
         //given
         final String url = "/api/articles";
-        final String title = "title";
-        final String content = "content";
 
+        // 2건 미리 생성
+        final String title1 = "title1";
+        final String content1 = "content1";
+        final String title2 = "title2";
+        final String content2 = "content2";
+
+            // 2건 이상 미리 저장하기
         blogRepository.save(Article.builder()
-                .title(title)
-                .content(content)
+                .title(title1)
+                .content(content1)
+                .build());
+        blogRepository.save(Article.builder()
+                .title(title2)
+                .content(content2)
                 .build());
 
         //when
@@ -98,8 +106,11 @@ public class BlogApiControllerTest {
         //then
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].content").value(content))
-                .andExpect(jsonPath("$[0].title").value(title));
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].content").value(content1))
+                .andExpect(jsonPath("$[0].title").value(title1))
+                .andExpect(jsonPath("$[1].content").value(content2))
+                .andExpect(jsonPath("$[1].title").value(title2));
 
     }
 
